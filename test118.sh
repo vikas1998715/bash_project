@@ -1,8 +1,6 @@
 #!/bin/bash
-echo "Enter the verilog file"
-read file1
-	
-	
+
+		
 #--------------------VARIABLE DECLARATION--------------------#
 	
 	declare -a INPUT_PORT_ARRAY
@@ -21,8 +19,27 @@ read file1
 	
 #-------------------------------------------------------------#
 	
-#----------------------FIND THE FILE--------------------------#
-	
+#----------------------ENTER THE FILE--------------------------#
+Input(){
+	echo "Enter the verilog file"
+	read file1
+}
+
+Input
+file1 =$(echo $file | tr -d '\r')
+
+cat ${file1}
+#while :
+#do	
+#	if test -f $file1; then
+#		echo "file 1 exists"
+#		break
+#	else
+#		echo "File does not exists"
+#		Input
+#	fi
+#done	
+
 #-------------------------------------------------------------#
 	
 #------------------COMPILATION OF VERILOG FILE----------------#
@@ -637,7 +654,16 @@ Main_Menu(){
 	read -r MAIN_MENU_CHOICE
 	
 	if [[ $MAIN_MENU_CHOICE -lt 10 ]] && [[ $MAIN_MENU_CHOICE -gt 1 ]];then
-		Fetching_Signals 
+		Fetching_Signals	
+		iverilog $file1 2> c
+		size=$(ls -l c | cut -d " " -f5)
+	
+		if [[ ! $size -eq 0 ]];then
+			cat c
+			rm c
+			exit 1
+
+		fi
 	fi
 
 	case $MAIN_MENU_CHOICE in
@@ -713,4 +739,5 @@ while :
 do
 	Main_Menu
 done
+
 
